@@ -15,7 +15,6 @@ const jobRoutes = require('./api/routes/jobs');
 const machineRoutes = require('./api/routes/machines');
 const roleRoutes = require('./api/routes/roles');
 
-
 app.use(morgan("dev"))
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,9 +23,20 @@ app.use(bodyParser.json())
 mongoose.set('useFindAndModify', false);
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/jcsDb', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/jcsdatabase', { useNewUrlParser: true })
     .then(() => console.log('MogoDB Connected...'))
     .catch(err => console.log(err))
+
+// Routes which should handle requests
+app.use('/api/attends', attendRoutes);
+app.use('/api/departments', departmentRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use('/api/employeeTypes', employeeTypeRoutes);
+app.use('/api/faultCategories', faultCategoryRoutes);
+app.use('/api/faults', faultRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/machines', machineRoutes);
+app.use('/api/roles', roleRoutes);
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -55,16 +65,5 @@ app.use((error, req, res, next) => {
         }
     });
 });
-
-// Routes which should handle requests
-app.use('/api/attends', attendRoutes);
-app.use('/api/departments', departmentRoutes);
-app.use('/api/employees', employeeRoutes);
-app.use('/api/employeeTypes', employeeTypeRoutes);
-app.use('/api/faultCategories', faultCategoryRoutes);
-app.use('/api/faults', faultRoutes);
-app.use('/api/jobs', jobRoutes);
-app.use('/api/machines', machineRoutes);
-app.use('/api/roles', roleRoutes);
 
 module.exports = app;
