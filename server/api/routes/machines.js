@@ -24,7 +24,6 @@ router.post('/', async (req, res) => {
     })
 
     await machine.save()
-    //console.log(result)
     res.json({
         success: true,
         message: "Machine is Registered!"
@@ -52,6 +51,23 @@ router.get('/check/:serialNumber', async (req, res) => {
             unique: false
         })
     }
+})
+
+//get job details in a machine
+router.get('/job/', async (req, res) => {
+    const machDetails = await Machine.aggregate([
+        { $lookup:
+           {
+             from: 'jobs',
+             localField: '_id',
+             foreignField: 'machineId',
+             as: 'jobdetails'
+           }
+         }
+        ])
+    res.json({
+        details: machDetails
+    })
 })
 
 module.exports = router;
