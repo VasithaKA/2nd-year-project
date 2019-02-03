@@ -17,6 +17,7 @@ const roleRoutes = require('./api/routes/roles');
 const employeeRoleRoutes = require('./api/routes/relation_routes/employeeRoles');
 const assignTechnicianRoutes = require('./api/routes/relation_routes/assignTechnicians');
 const jobFaultRoutes = require('./api/routes/relation_routes/jobFaults');
+const solveRoutes = require('./api/routes/relation_routes/solves');
 
 app.use(morgan("dev"))
 
@@ -43,6 +44,7 @@ app.use('/api/roles', roleRoutes);
 app.use('/api/employeeRoles', employeeRoleRoutes);
 app.use('/api/assignTechnicians', assignTechnicianRoutes);
 app.use('/api/jobFaults', jobFaultRoutes);
+app.use('/api/solves', solveRoutes);
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
