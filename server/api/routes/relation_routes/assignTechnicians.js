@@ -39,9 +39,15 @@ router.get('/:technicianId', async (req, res) => {
 //get Assign Technician in a job
 router.get('/:jobId', async (req, res) => {
     const assignTechnicians = await AssignTechnician.find({jobId: req.params.jobId}).populate('technicianId')
-    res.json({
-        assignTechnicians: assignTechnicians
-    })
+    if (assignTechnicians) {
+        res.json({
+            assignTechnicians: assignTechnicians
+        })
+    } else {
+        res.json({
+            message: "Pending"
+        })
+    }
 })
 
 module.exports = router;
