@@ -34,7 +34,8 @@ router.post('/', async (req, res) => {
         }
         if (result) {
             res.json({
-                success: true
+                success: true,
+                employeeType: resp.employeeTypeId.employeeTypeName
             })
             req.session.user = resp
             req.session.save()

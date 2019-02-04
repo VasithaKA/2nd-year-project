@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 })
 
 //get Assign Technician Details
-router.get('/:technicianId', async (req, res) => {
+router.get('/technician/:technicianId', async (req, res) => {
     const assignTechnicianJobs = await AssignTechnician.find({technicianId: req.params.technicianId}).populate('jobId')
     res.json({
         assignTechnicianJobs: assignTechnicianJobs
@@ -37,7 +37,7 @@ router.get('/:technicianId', async (req, res) => {
 })
 
 //get Assign Technician in a job
-router.get('/:jobId', async (req, res) => {
+router.get('/job/:jobId', async (req, res) => {
     const assignTechnicians = await AssignTechnician.find({jobId: req.params.jobId}).populate('technicianId')
     if (assignTechnicians) {
         res.json({
