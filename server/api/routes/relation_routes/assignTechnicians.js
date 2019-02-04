@@ -45,7 +45,7 @@ router.get('/:jobId', async (req, res) => {
         })
     } else {
         res.json({
-            message: "Pending"
+            status: "Pending"
         })
     }
 })

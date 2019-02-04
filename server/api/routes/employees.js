@@ -182,7 +182,7 @@ router.get('/:_id', async (req, res) => {
 
 //get all emloyees details
 router.get('/', async (req, res) => {
-    const empDetails = await Employee.find().populate('employeeTypeId')
+    const empDetails = await Employee.find().populate('employeeTypeId').populate('departmentId')
     res.json({
         details: empDetails
     })

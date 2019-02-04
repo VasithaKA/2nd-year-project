@@ -36,4 +36,12 @@ router.get('/:jobId', async (req, res) => {
     })
 })
 
+//get Faults In all Jobs
+router.get('/', async (req, res) => {
+    const faultsInAJob = await JobFault.find().populate({ path: 'jobId', populate: { path: 'machineId' } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+    res.json({
+        faultsInAJob: faultsInAJob
+    })
+})
+
 module.exports = router;

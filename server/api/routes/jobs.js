@@ -25,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage: storage, fileFilter: fileFilter})
 
-//Register a User
+//Create job
 router.post('/', upload.single('faultImage'), async (req, res) => {
     const existingJobId = await Job.findOne({ jobId: req.body.jobId })
 
@@ -76,6 +76,14 @@ router.get('/:_id', async (req, res) => {
     const aJobDetails = await Job.findById(req.params._id)
     res.json({
         aJobDetails: aJobDetails
+    })
+})
+
+//get all job details
+router.get('/', async (req, res) => {
+    const jobDetails = await Job.find().populate('machineId')
+    res.json({
+        jobDetails: jobDetails
     })
 })
 

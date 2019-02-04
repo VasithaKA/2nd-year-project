@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const app = express();
 
@@ -18,18 +19,26 @@ const employeeRoleRoutes = require('./api/routes/relation_routes/employeeRoles')
 const assignTechnicianRoutes = require('./api/routes/relation_routes/assignTechnicians');
 const jobFaultRoutes = require('./api/routes/relation_routes/jobFaults');
 const solveRoutes = require('./api/routes/relation_routes/solves');
+const loginRoutes = require('./api/routes/login');
 
 app.use(morgan("dev"))
 
+app.use('/profile_pictures',express.static('profile_pictures'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 mongoose.set('useFindAndModify', false);
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/jcsdatabase', { useNewUrlParser: true })
+mongoose.connect('mongodb://team wasted:123zxc@ds235711.mlab.com:35711/jcsdatabase', { useNewUrlParser: true })
     .then(() => console.log('MogoDB Connected...'))
     .catch(err => console.log(err))
+
+app.use(session({
+    secret: 'secretcookies',
+    saveUninitialized: true,
+    resave: false
+}))
 
 // Routes which should handle requests
 app.use('/api/attends', attendRoutes);
@@ -45,6 +54,7 @@ app.use('/api/employeeRoles', employeeRoleRoutes);
 app.use('/api/assignTechnicians', assignTechnicianRoutes);
 app.use('/api/jobFaults', jobFaultRoutes);
 app.use('/api/solves', solveRoutes);
+app.use('/api/login', loginRoutes);
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");

@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
 //get all machine details
 router.get('/', async (req, res) => {
-    const machDetails = await Machine.find()
+    const machDetails = await Machine.find().populate('departmentId')
     res.json({
         details: machDetails
     })
