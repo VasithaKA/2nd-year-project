@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 require('../../models/relationships/AssignTechnician');
 const AssignTechnician = mongoose.model('assignTechnicians');
 
+require('../../models/Job');
+const Job = mongoose.model('jobs');
+
 //set Assign Technician
 router.post('/', async (req, res) => {
     const existingAssignTechnician = await AssignTechnician.findOne({ jobId: req.body.jobId, technicianId: req.body.technicianId })
@@ -48,6 +51,23 @@ router.get('/job/:jobId', async (req, res) => {
             status: "Pending"
         })
     }
+})
+
+//pending jobs
+router.get('/pending/', async (req, res) => {
+    const allJobs = await Job.find({}, {roll:1})
+
+    var pendingJobs = [];
+    for (let i = 0; i < allJobs.length; i++) {
+        const assignTechnicians = await AssignTechnician.findOne({jobId: allJobs[i]._id})
+        if(!assignTechnicians){
+            const pendingJob = await Job.findById(allJobs[i]._id)
+            pendingJobs.push(pendingJob)
+        }
+    }
+    res.json({
+        pendingJobs
+    })
 })
 
 module.exports = router;

@@ -34,8 +34,7 @@ router.post('/', async (req, res) => {
         return
     }
     const faultCategory = new FaultCategory({
-        faultCategoryName: req.body.faultCategoryName,
-        faultCategoryDescription: req.body.faultCategoryDescription
+        faultCategoryName: req.body.faultCategoryName
     })
 
     await faultCategory.save()
@@ -75,7 +74,7 @@ router.patch('/:_id', async (req, res) => {
         return
     }
 
-    await FaultCategory.findByIdAndUpdate(req.params._id, { $set: { faultCategoryName: req.body.faultCategoryDescription, faultCategoryName: req.body.faultCategoryDescription } })
+    await FaultCategory.findByIdAndUpdate(req.params._id, { $set: { faultCategoryName: req.body.faultCategoryName } })
         .then(() => {
             res.json({
                 success: true,

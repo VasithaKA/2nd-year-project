@@ -24,13 +24,14 @@ const loginRoutes = require('./api/routes/login');
 app.use(morgan("dev"))
 
 app.use('/profile_pictures',express.static('profile_pictures'))
+app.use('/fault_images',express.static('fault_images'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 mongoose.set('useFindAndModify', false);
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://team wasted:123zxc@ds235711.mlab.com:35711/jcsdatabase', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/jcsdatabase', { useNewUrlParser: true })
     .then(() => console.log('MogoDB Connected...'))
     .catch(err => console.log(err))
 

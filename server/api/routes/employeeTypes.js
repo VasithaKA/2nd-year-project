@@ -10,7 +10,7 @@ const Employee = mongoose.model('employees');
 
 //check user type is taken
 router.get('/check/:employeeTypeName', async (req, res) => {
-    const unique = await EmployeeType.findOne({ userTypeId: req.params.employeeTypeName })
+    const unique = await EmployeeType.findOne({ employeeTypeName: req.params.employeeTypeName })
     if (unique) {
         res.json({
             unique: true
