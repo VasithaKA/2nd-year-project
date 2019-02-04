@@ -55,19 +55,21 @@ router.get('/job/:jobId', async (req, res) => {
 
 //pending jobs
 router.get('/pending/', async (req, res) => {
-    const allJobs = await Job.find({}, {roll:1})
-
+    const allJobs = await Job.find({}, {machineId:1, _id:0}).populate('machineId')
+    res.json({
+        allJobs
+    })
     var pendingJobs = [];
     for (let i = 0; i < allJobs.length; i++) {
         const assignTechnicians = await AssignTechnician.findOne({jobId: allJobs[i]._id})
         if(!assignTechnicians){
-            const pendingJob = await Job.findById(allJobs[i]._id)
+            const pendingJob = await Job.findById(allJobs[i]._id).populate( { path: 'machineId', populate: { path: 'departmentId' }} )
             pendingJobs.push(pendingJob)
         }
     }
-    res.json({
-        pendingJobs
-    })
+    // res.json({
+    //     pendingJobs
+    // })
 })
 
 module.exports = router;
