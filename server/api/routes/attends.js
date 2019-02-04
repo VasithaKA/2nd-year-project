@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 require('../models/Attend');
 const Attend = mongoose.model('attends');
 
+//add to Attend Technician
 router.post('/', async (req, res) => {
     const attend = new Attend({
         date: req.body.date,
