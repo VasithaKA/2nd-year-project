@@ -86,7 +86,7 @@ router.patch('/:_id', async (req, res) => {
 
 })
 
-//Delete user type
+//Delete Department
 router.delete('/:_id', async (req, res) => {
     const isAnyEmployee = await Employee.findOne({ departmentId: req.params._id })
     const isAnyMachine = await Machine.findOne({ departmentId: req.params._id })

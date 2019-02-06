@@ -39,17 +39,25 @@ router.post('/', async (req, res) => {
 
 //get Faults In A Job
 router.get('/:jobId', async (req, res) => {
-    const faultsInAJob = await JobFault.find({jobId: req.params.jobId}).populate('faultId')
+    const faultsInAJob = await JobFault.find({jobId: req.params.jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+    var faultsInAJobs = []
+    for (let i = 0; i < faultsInAJob.length; i++) {
+        faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+    }
     res.json({
-        faultsInAJob: faultsInAJob
+        faultsInAJobs
     })
 })
 
 //get Faults In all Jobs
 router.get('/', async (req, res) => {
-    const faultsInAJob = await JobFault.find().populate({ path: 'jobId', populate: { path: 'machineId' } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+    const faultsInAJob = await JobFault.find().populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+    var faultsInAJobs = []
+    for (let i = 0; i < faultsInAJob.length; i++) {
+        faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+    }
     res.json({
-        faultsInAJob: faultsInAJob
+        faultsInAJobs
     })
 })
 

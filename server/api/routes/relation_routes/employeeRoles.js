@@ -18,6 +18,21 @@ router.post('/:employeeTypeId', async (req, res) => {
             await employeeRole.save()
         }
     }
+    const setRolesForThisType = await EmployeeRole.find({ employeeTypeId: req.params.employeeTypeId })
+    if (setRolesForThisType.length != req.body.roleId.length) {
+        for (let i = 0; i < setRolesForThisType.length; i++) {
+            var count = 0;
+            for (let j = 0; j < req.body.roleId.length; j++) {
+                if (setRolesForThisType[i].roleId != req.body.roleId[j]) {
+                    count = count + 1
+                }
+            }
+            if (count === req.body.roleId.length) {
+                await EmployeeRole.findOneAndDelete({ roleId: setRolesForThisType[i].roleId })
+            }
+        }
+    }
+
     res.json({
         success: true,
         message: "Your data is Updated!"

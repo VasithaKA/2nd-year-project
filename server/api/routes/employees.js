@@ -8,11 +8,11 @@ require('../models/Employee');
 const Employee = mongoose.model('employees');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './profile_pictures/')
     },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() +"_"+ file.originalname)
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "_" + file.originalname)
     }
 })
 
@@ -24,7 +24,7 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-const upload = multer({storage: storage, fileFilter: fileFilter})
+const upload = multer({ storage: storage, fileFilter: fileFilter })
 
 //Register a User
 router.post('/', upload.single('profilePicture'), async (req, res) => {
@@ -40,7 +40,7 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
     }
 
     if (req.file) {
-        bcrypt.hash(req.body.password, 12, (err,hash) => {
+        bcrypt.hash(req.body.password, 12, (err, hash) => {
             const employee = new Employee({
                 employeeId: req.body.employeeId,
                 firstName: req.body.firstName,
@@ -51,7 +51,7 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
                 departmentId: req.body.departmentId,
                 profilePicture: req.file.path
             })
-        
+
             employee.save()
             res.json({
                 success: true,
@@ -69,7 +69,7 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
                 employeeTypeId: req.body.employeeTypeId,
                 departmentId: req.body.departmentId
             })
-        
+
             employee.save()
             res.json({
                 success: true,
@@ -218,11 +218,13 @@ router.get('/checkUserName/:userName', async (req, res) => {
 
 //change password
 router.patch('/password/:_id', async (req, res) => {
-    await Employee.findByIdAndUpdate(req.params._id, { $set: { password: req.body.password } })
-    .then(() => {
-        res.json({
-            success: true,
-            message: "Password is Change!"
+    bcrypt.hash(req.body.password, 12, (err, hash) => {
+        Employee.findByIdAndUpdate(req.params._id, { $set: { password: hash } })
+        .then(() => {
+            res.json({
+                success: true,
+                message: "Password is Change!"
+            })
         })
     })
 })
