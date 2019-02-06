@@ -8,6 +8,12 @@ const EmployeeType = mongoose.model('employeeTypes');
 require('../models/Employee');
 const Employee = mongoose.model('employees');
 
+require('../models/relationships/EmployeeRole');
+const EmployeeRole = mongoose.model('employeeRoles');
+
+require('../models/Role');
+const Role = mongoose.model('roles');
+
 //check user type is taken
 router.get('/check/:employeeTypeName', async (req, res) => {
     const unique = await EmployeeType.findOne({ employeeTypeName: req.params.employeeTypeName })
@@ -36,12 +42,23 @@ router.post('/', async (req, res) => {
     const employeeType = new EmployeeType({
         employeeTypeName: req.body.employeeTypeName
     })
-
     await employeeType.save()
+
+    const employeeTypeId = await EmployeeType.findOne({ employeeTypeName: req.body.employeeTypeName })
+    console.log(employeeTypeId)
+    const roles = await Role.find()
+    for (let i = 0; i < roles.length; i++) {
+        const employeeRole = new EmployeeRole({
+            roleId: roles[i]._id,
+            employeeTypeId: employeeTypeId
+        })
+        employeeRole.save()
+    }
     res.json({
         success: true,
         message: "Employee Type Name is Registered!"
     })
+
 })
 
 //get one userType Details
@@ -64,7 +81,7 @@ router.get('/', async (req, res) => {
 router.patch('/:_id', async (req, res) => {
     const thisEmployeeType = await EmployeeType.findOne({ userTypeId: req.body.employeeTypeName })
     const existingEmployeeType = await EmployeeType.findOne({ _id: req.params._id, employeeTypeName: req.body.employeeTypeName })
-    const isAdmin = await EmployeeType.findById( req.params._id )
+    const isAdmin = await EmployeeType.findById(req.params._id)
 
     if (isAdmin.employeeTypeName === 'Administrator') {
         res.json({
@@ -95,7 +112,7 @@ router.patch('/:_id', async (req, res) => {
 //Delete user type
 router.delete('/:_id', async (req, res) => {
     const isAnyEmployee = await Employee.findOne({ employeeTypeId: req.params._id })
-    const isAdmin = await EmployeeType.findById( req.params._id )
+    const isAdmin = await EmployeeType.findById(req.params._id)
     if (isAnyEmployee || isAdmin.employeeTypeName === 'Administrator') {
         res.json({
             success: false,
@@ -103,6 +120,12 @@ router.delete('/:_id', async (req, res) => {
         })
         return
     } else {
+        const employeeRole = await EmployeeRole.find({ employeeTypeId: req.params._id })
+        if (employeeRole) {
+            for (let i = 0; i < employeeRole.length; i++) {
+                EmployeeRole.findOneAndDelete({ roleId: employeeRole[i].roleId })
+            }
+        }
         await EmployeeType.findByIdAndDelete(req.params._id)
             .then(() => {
                 res.json({

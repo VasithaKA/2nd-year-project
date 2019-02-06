@@ -6,8 +6,11 @@ require('../../models/relationships/EmployeeRole');
 const EmployeeRole = mongoose.model('employeeRoles');
 
 //set employee role
-router.post('/:employeeTypeId', async (req, res) => {
-    for (let i = 0; i < req.body.roleId.length; i++) {
+router.patch('/set/:employeeTypeId', async (req, res) => {
+    const a = await EmployeeRole.findOne({ employeeTypeId: req.body.employeeTypeId})
+    console.log(req.body.setRoles)
+
+    for (let i = 0; i < req.body.setRoles.length; i++) {
         const existingEmployeeTypeRole = await EmployeeRole.findOne({ employeeTypeId: req.params.employeeTypeId, roleId: req.body.roleId[i] })
 
         if (!existingEmployeeTypeRole) {

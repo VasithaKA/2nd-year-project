@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
         return
     }
 
-    const userRole = await EmployeeRole.find({ employeeTypeId: resp.employeeTypeId }).populate('roleId', 'roleNumber')
+    const userRole = await EmployeeRole.find({ employeeTypeId: resp.employeeTypeId, status: true }).populate('roleId', 'roleNumber')
 
     bcrypt.compare(req.body.password, resp.password, (err, result) => {
         if (err) {
@@ -35,7 +35,8 @@ router.post('/', async (req, res) => {
         if (result) {
             res.json({
                 success: true,
-                employeeType: resp.employeeTypeId.employeeTypeName
+                employeeId:resp._id,
+                employeeTypeName: resp.employeeTypeId.employeeTypeName
             })
             req.session.user = resp
             req.session.save()

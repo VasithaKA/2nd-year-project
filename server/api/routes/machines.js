@@ -39,6 +39,14 @@ router.get('/', async (req, res) => {
     })
 })
 
+//get all machine details
+router.post('/check/serialNumber', async (req, res) => {
+    const machDetails = await Machine.findOne({ serialNumber: req.body.serialNumber }).populate('departmentId')
+    res.json({
+        unique: machDetails
+    })
+})
+
 //check serialNumber is taken
 router.get('/check/:serialNumber', async (req, res) => {
     const unique = await Machine.findOne({ serialNumber: req.params.serialNumber })

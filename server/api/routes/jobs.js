@@ -40,8 +40,10 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
     if (req.file) {
             const job = new Job({
                 jobId: req.body.jobId,
-                date: req.body.date,
+                date: Date.now(),
                 description: req.body.description,
+                year: year,
+                month: month,
                 faultImage: req.file.path,
                 machineId: req.body.machineId,
                 createOperatorId: req.body.createOperatorId,

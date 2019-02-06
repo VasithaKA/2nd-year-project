@@ -24,7 +24,8 @@ router.post('/', async (req, res) => {
     }
     const assignTechnician = new AssignTechnician({
         jobId: req.body.jobId,
-        technicianId: req.body.technicianId
+        technicianId: req.body.technicianId,
+        date: Date.now()
     })
     await assignTechnician.save()
         .then(() => res.json({

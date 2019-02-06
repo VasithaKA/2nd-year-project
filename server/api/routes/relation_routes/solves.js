@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         jobId: req.body.jobId,
         technicianId: req.body.technicianId,
         startTime: req.body.startTime,
-        endtTime: req.body.endtTime,
+        endTime: req.body.endtTime,
         status: req.body.status,
         mark: req.body.mark
     })
