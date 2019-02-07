@@ -39,7 +39,15 @@ router.get('/', async (req, res) => {
     })
 })
 
-//get all machine details
+//get a machine details
+router.get('/:_id', async (req, res) => {
+    const machDetails = await Machine.findById(req.params._id).populate('departmentId').populate('supervisorId')
+    res.json({
+        details: machDetails
+    })
+})
+
+//get a machine details
 router.post('/check/serialNumber', async (req, res) => {
     const machDetails = await Machine.findOne({ serialNumber: req.body.serialNumber }).populate('departmentId')
     res.json({
@@ -77,5 +85,46 @@ router.get('/job/', async (req, res) => {
         details: machDetails
     })
 })
+
+//Update machine details
+router.patch('/:_id', async (req, res) => {
+    await Machine.findByIdAndUpdate(req.params._id, { $set: { serialNumber: req.body.serialNumber, location: req.body.location, departmentId: req.body.departmentId, supervisorId: req.body.supervisorId } })
+        .then(() => {
+            res.json({
+                success: true,
+                message: "Your data is Updated!"
+            })
+        })
+})
+
+
+//get machine details without array
+router.get('/machines', function(req, res) {
+    console.log('Get all machine details');
+    Machine.find({}) 
+    .populate('departmentId')
+    .exec(function(err,machines){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(machines);
+        }
+    });
+  });
+
+  //get a machine details without array
+router.get('/machines/:_id', function(req, res) {
+    console.log('Get a machine details');
+    Machine.findById(req.params._id) 
+    .populate('departmentId')
+    .exec(function(err,machine){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(machine);
+        }
+    });
+  });
+
 
 module.exports = router;

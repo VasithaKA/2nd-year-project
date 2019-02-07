@@ -49,7 +49,8 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
                 password: hash,
                 employeeTypeId: req.body.employeeTypeId,
                 departmentId: req.body.departmentId,
-                profilePicture: req.file.path
+                profilePicture: req.file.path,
+                expertiseId: req.body.faultCategoryId
             })
 
             employee.save()
@@ -67,7 +68,8 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
                 userName: req.body.userName,
                 password: hash,
                 employeeTypeId: req.body.employeeTypeId,
-                departmentId: req.body.departmentId
+                departmentId: req.body.departmentId,
+                expertiseId: req.body.faultCategoryId
             })
 
             employee.save()
@@ -99,7 +101,7 @@ router.patch('/:_id', upload.single('profilePicture'), async (req, res) => {
         const admins = await Employee.find({ employeeTypeId: findEmployeeType.employeeTypeId })
         if (admins.length > 1) {
             if (req.file) {
-                await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, profilePicture: req.file.path } })
+                await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, profilePicture: req.file.path, expertiseId: req.body.faultCategoryId } })
                     .then(() => {
                         res.json({
                             success: true,
@@ -107,7 +109,7 @@ router.patch('/:_id', upload.single('profilePicture'), async (req, res) => {
                         })
                     })
             } else {
-                await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId } })
+                await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, expertiseId: req.body.faultCategoryId } })
                     .then(() => {
                         res.json({
                             success: true,
@@ -126,7 +128,7 @@ router.patch('/:_id', upload.single('profilePicture'), async (req, res) => {
     }
 
     if (req.file) {
-        await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, profilePicture: req.file.path } })
+        await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, profilePicture: req.file.path, expertiseId: req.body.faultCategoryId } })
             .then(() => {
                 res.json({
                     success: true,
@@ -134,7 +136,7 @@ router.patch('/:_id', upload.single('profilePicture'), async (req, res) => {
                 })
             })
     } else {
-        await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId } })
+        await Employee.findByIdAndUpdate(req.params._id, { $set: { employeeId: req.body.employeeId, firstName: req.body.firstName, lastName: req.body.lastName, userName: req.body.userName, employeeTypeId: req.body.employeeTypeId, departmentId: req.body.departmentId, expertiseId: req.body.faultCategoryId } })
             .then(() => {
                 res.json({
                     success: true,
@@ -147,9 +149,9 @@ router.patch('/:_id', upload.single('profilePicture'), async (req, res) => {
 
 //Delete account
 router.delete('/:_id', async (req, res) => {
-    const findUserType = await Employee.findById(req.params._id).populate('userTypeId', 'userTypeId')
-    if (findUserType.userTypeId.userTypeId == 'admin') {
-        const admins = await Employee.find({ userTypeId: findUserType.userTypeId._id })
+    const findUserType = await Employee.findById(req.params._id).populate('employeeTypeId', 'employeeTypeName')
+    if (findUserType.employeeTypeId.employeeTypeName == 'Administrator') {
+        const admins = await Employee.find({ employeeTypeId: findUserType.employeeTypeId._id })
         if (admins.length > 1) {
             await Employee.findByIdAndDelete(req.params._id)
                 .then(() => {
@@ -228,5 +230,35 @@ router.patch('/password/:_id', async (req, res) => {
         })
     })
 })
+
+
+
+//Get employees details without using an array
+router.get('/employeetype/:employeeTypeId', function(req, res) {
+    console.log('Get all employee types');
+    Employee.find({"employeeTypeId":req.params.employeeTypeId}) 
+    .exec(function(err,employees){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(employees);
+        }
+    });
+  });
+
+    //get a machine details without array
+router.get('/employeetype/:employeeTypeId/:_id', function(req, res) {
+    console.log('Get a machine details');
+    Employee.findById(req.params._id) 
+    .populate('departmentId')
+    .exec(function(err,employee){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(employee);
+        }
+    });
+  });
+
 
 module.exports = router;

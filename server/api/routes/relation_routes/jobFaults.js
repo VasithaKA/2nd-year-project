@@ -90,4 +90,19 @@ router.get('/availableTechnician/:jobId', async (req, res) => {
     })
 })
 
+
+//get Faults In A Job
+router.get('/jobs/:jobId', function(req, res) {
+    console.log('Get all job details');
+    JobFault.find({jobId: req.params.jobId}) 
+    .populate('faultId')
+    .exec(function(err,jobFaults){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(jobFaults);
+        }
+    });
+  }); 
+
 module.exports = router;

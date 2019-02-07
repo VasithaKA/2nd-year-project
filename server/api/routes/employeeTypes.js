@@ -135,4 +135,20 @@ router.delete('/:_id', async (req, res) => {
     }
 })
 
+
+
+//get jobs details without
+router.get('/employeetypes', function(req, res) {
+    console.log('Get all job details');
+    EmployeeType.find({}) 
+    .exec(function(err,employeeTypes){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(employeeTypes);
+        }
+    });
+  });
+
+
 module.exports = router;

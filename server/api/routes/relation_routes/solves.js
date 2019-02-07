@@ -36,12 +36,12 @@ router.post('/', async (req, res) => {
 })
 
 //get completed Jobs are done by spec. Technician
-router.get('/:technicianId', async (req, res) => {
-    const completedJobs = await Solve.find({technicianId: req.params.technicianId, status:"complete"}).populate('jobId')
-    res.json({
-        completedJobs: completedJobs
-    })
-})
+// router.get('/:technicianId', async (req, res) => {
+//     const completedJobs = await Solve.find({technicianId: req.params.technicianId, status:"complete"}).populate('jobId')
+//     res.json({
+//         completedJobs: completedJobs
+//     })
+// })
 
 //get completed Jobs 
 router.get('/complete/', async (req, res) => {
@@ -58,7 +58,7 @@ router.get('/complete/', async (req, res) => {
     })
 })
 
-//get completed Jobs 
+//get incompleted Jobs 
 router.get('/incomplete/', async (req, res) => {
     const completedJobs = await Solve.find({status:"incomplete"},{jobId:1, _id:0})
     for (let j = 0; j < completedJobs.length; j++) {
@@ -71,6 +71,68 @@ router.get('/incomplete/', async (req, res) => {
     res.json({
         completedJobsDetails: faultsInAJobs
     })
+})
+
+
+  //get job details of a machine without uning an array
+  router.get('/job/:technicianId/:year/:status', function(req, res) {
+    console.log('Get a job details');
+    Solve.find({"technicianId":req.params.technicianId, "year":req.params.year,"status":req.params.status}) 
+    
+    //.populate(job)
+    .exec(function(err,solve){
+        console.log("technicianId")
+        if(err){
+            console.log(err);
+        } else {
+           var tempArr = [0,0,0,0,0,0,0,0,0,0,0,0]
+            solve.forEach(element => {
+                //console.log("technicianId")
+                var tempDate = new Date(element.endTime) 
+               //console.log(tempDate.getMonth());
+               //if(solve.status==='complete')
+                tempArr[tempDate.getMonth()] +=1;
+            });
+            res.json({
+                //jobs : job,
+                data : tempArr
+            }); 
+        }
+    });
+  });
+
+//get completed Jobs are done by spec. Technician
+router.get('/:technicianId', async (req, res) => {
+    console.log('here')
+   var complete;
+   var incomplete;
+console.log(req.params.technicianId)
+    Solve.find({ technicianId: req.params.technicianId ,status:"complete"},
+        (err, result) => {
+            if (!result) {
+                // return res.status(404).json({ status: false, message: 'User record not found.' });
+                console.log('err')
+            }
+            else {
+                Solve.find({ technicianId: req.params.technicianId ,status:"incomplete"},
+                (err, resultin) => {
+                    if (!resultin) {
+                        // return res.status(404).json({ status: false, message: 'User record not found.' });
+                        console.log('err')
+                    }
+                    else {
+                        //incomplete=result.length
+                        let rate=result.length/(result.length+resultin.length)*100;
+                        return res.json({ status: true,rate:Math.round(rate * 100) / 100});
+                    }
+                }
+            );
+            }
+        }
+    );
+    
+    console.log(complete)
+    
 })
 
 module.exports = router;

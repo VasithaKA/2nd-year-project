@@ -42,8 +42,8 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
                 jobId: req.body.jobId,
                 date: Date.now(),
                 description: req.body.description,
-                year: year,
-                month: month,
+                year: req.body.year,
+                month: req.body.month,
                 faultImage: req.file.path,
                 machineId: req.body.machineId,
                 createOperatorId: req.body.createOperatorId,
@@ -58,8 +58,10 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
     } else {
             const job = new Job({
                 jobId: req.body.jobId,
-                date: req.body.date,
+                date: Date.now(),
                 description: req.body.description,
+                year: req.body.year,
+                month: req.body.month,
                 machineId: req.body.machineId,
                 createOperatorId: req.body.createOperatorId,
                 assignEngineerId: req.body.assignEngineerId
@@ -96,5 +98,58 @@ router.get('/job/:machineId', async (req, res) => {
         details: jobDetailsInAMachine
     })
 })
+
+
+
+//get jobs details without
+router.get('/jobs', function(req, res) {
+    console.log('Get all job details');
+    Job.find({}) 
+    .exec(function(err,jobs){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(jobs);
+        }
+    });
+  });
+
+  
+//get job details without
+router.get('/jobs/:_id', function(req, res) {
+    console.log('Get all job details');
+    Job.findById(req.params._id) 
+    .populate('machineId')
+    .populate('createOperatorId')
+    .exec(function(err,job){
+        if(err){
+            console.log("Error");
+        } else {
+            res.json(job);
+        }
+    });
+  });
+
+  //get job details of a machine without uning an array
+router.get('/jobs/jobs/:machineId/:year', function(req, res) {
+    console.log('Get a job details');
+    Job.find({"machineId":req.params.machineId,"year":req.params.year}) 
+    .exec(function(err,job){
+        if(err){
+            console.log("Error");
+        } else {
+            var tempArr = [0,0,0,0,0,0,0,0,0,0,0,0]
+            job.forEach(element => {
+                var tempDate = new Date(element.date) 
+               // console.log(tempDate.getMonth());
+                tempArr[tempDate.getMonth()] +=1;
+            });
+            res.json({
+                //jobs : job,
+                data : tempArr
+            }); 
+        }
+    });
+  });
 
 module.exports = router;

@@ -35,6 +35,16 @@ router.post('/', async (req, res) => {
         )
 })
 
+//accept
+router.post('/accept/', async (req, res) => {
+    await AssignTechnician.findOneAndUpdate({jobId: req.body.jobId},{ $set: { accept: req.body.accept } })
+    .then(()=>{
+        res.json({
+            success:true
+        })
+    })
+})
+
 //get Assign Technician Details
 router.get('/technician/:technicianId', async (req, res) => {
     const assignTechnicianJobs = await AssignTechnician.find({technicianId: req.params.technicianId}).populate('jobId')
@@ -83,5 +93,28 @@ router.get('/pending/', async (req, res) => {
     //     pendingJobs
     // })
 })
+
+//get job details of a machine without uning an array
+router.get('/jobs/:technicianId/:year', function(req, res) {
+    console.log('Get a job details');
+    AssignTechnician.find({"technicianId":req.params.technicianId,"year":req.params.year}) 
+    //.populate(job)
+    .exec(function(err,assignTechnician){
+        if(err){
+            console.log("Error");
+        } else {
+            var tempArr = [0,0,0,0,0,0,0,0,0,0,0,0]
+            assignTechnician.forEach(element => {
+                var tempDate = new Date(element.date) 
+               // console.log(tempDate.getMonth());
+                tempArr[tempDate.getMonth()] +=1;
+            });
+            res.json({
+                //jobs : job,
+                data : tempArr
+            }); 
+        }
+    });
+  });
 
 module.exports = router;
