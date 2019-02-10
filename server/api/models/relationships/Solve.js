@@ -5,6 +5,8 @@ const SolveSchema = new mongoose.Schema({
     technicianId: { type: mongoose.Schema.Types.ObjectId, ref: 'employees', required: true },
     startTime: { type: Date, required: false },
     endTime: { type: Date, required: false },
+    year: { type: String, required: false},
+    month: { type: String, required: false},
     status: { type: String, default: "incomplete" },
     mark: { type: Date, required: false }
 });

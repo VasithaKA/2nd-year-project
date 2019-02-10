@@ -22,8 +22,10 @@ router.post('/', async (req, res) => {
     const solve = new Solve({
         jobId: req.body.jobId,
         technicianId: req.body.technicianId,
-        startTime: req.body.startTime,
+        startTime: Date.now(),
         endTime: req.body.endtTime,
+        year: req.body.year,
+        month:req.body.month,
         status: req.body.status,
         mark: req.body.mark
     })

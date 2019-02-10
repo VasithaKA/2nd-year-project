@@ -99,7 +99,7 @@ router.patch('/:_id', async (req, res) => {
 
 
 //get machine details without array
-router.get('/machines', function(req, res) {
+router.get('/machines/machines', function(req, res) {
     console.log('Get all machine details');
     Machine.find({}) 
     .populate('departmentId')
@@ -113,7 +113,7 @@ router.get('/machines', function(req, res) {
   });
 
   //get a machine details without array
-router.get('/machines/:_id', function(req, res) {
+router.get('/machines/machines/:_id', function(req, res) {
     console.log('Get a machine details');
     Machine.findById(req.params._id) 
     .populate('departmentId')
