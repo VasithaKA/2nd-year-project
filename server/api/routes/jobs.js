@@ -2,13 +2,16 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
-const moment = require('moment')
+const moment = require('moment');
 
 require('../models/Job');
 const Job = mongoose.model('jobs');
 
 require('../models/relationships/Solve');
 const Solve = mongoose.model('solves');
+
+require('../models/relationships/JobFault');
+const JobFault = mongoose.model('jobFaults');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -55,9 +58,19 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
         })
 
         job.save()
-        res.json({
-            success: true,
-            message: "Job is Registered!"
+        .then((thisJob)=>{
+            Job.findOne({ jobId: req.body.jobId })
+            const jobFault = new JobFault({
+                jobId: thisJob._id,
+                faultId: req.body.faultId
+            })
+            jobFault.save()
+        })
+        .then(()=>{
+            res.json({
+                success: true,
+                message: "Job is Registered!"
+            })
         })
     } else {
         const job = new Job({
@@ -72,9 +85,19 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
         })
 
         job.save()
-        res.json({
-            success: true,
-            message: "Job is Registered!"
+        .then((thisJob)=>{
+            Job.findOne({ jobId: req.body.jobId })
+            const jobFault = new JobFault({
+                jobId: thisJob._id,
+                faultId: req.body.faultId
+            })
+            jobFault.save()
+        })
+        .then(()=>{
+            res.json({
+                success: true,
+                message: "Job is Registered!"
+            })
         })
     }
 })

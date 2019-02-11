@@ -206,31 +206,31 @@ router.put('/:_id', async (req, res) => {
 })
 
 //Delete account
-router.delete('/:_id', async (req, res) => {
-    const findUserType = await Employee.findById(req.params._id).populate('employeeTypeId', 'employeeTypeName')
-    if (findUserType.employeeTypeId.employeeTypeName == 'Administrator') {
-        const admins = await Employee.find({ employeeTypeId: findUserType.employeeTypeId._id })
-        if (admins.length > 1) {
-            await Employee.findByIdAndDelete(req.params._id)
-                .then(() => {
-                    res.json({
-                        success: true
-                    })
-                })
-        } else {
-            res.json({
-                success: false
-            })
-        }
-    } else {
-        await Employee.findByIdAndDelete(req.params._id)
-            .then(() => {
-                res.json({
-                    success: true
-                })
-            })
-    }
-})
+// router.delete('/:_id', async (req, res) => {
+//     const findUserType = await Employee.findById(req.params._id).populate('employeeTypeId', 'employeeTypeName')
+//     if (findUserType.employeeTypeId.employeeTypeName == 'Administrator') {
+//         const admins = await Employee.find({ employeeTypeId: findUserType.employeeTypeId._id })
+//         if (admins.length > 1) {
+//             await Employee.findByIdAndDelete(req.params._id)
+//                 .then(() => {
+//                     res.json({
+//                         success: true
+//                     })
+//                 })
+//         } else {
+//             res.json({
+//                 success: false
+//             })
+//         }
+//     } else {
+//         await Employee.findByIdAndDelete(req.params._id)
+//             .then(() => {
+//                 res.json({
+//                     success: true
+//                 })
+//             })
+//     }
+// })
 
 //get one emloyee details
 router.get('/:_id', async (req, res) => {
