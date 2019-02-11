@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const moment = require('moment')
 
 require('../models/Job');
 const Job = mongoose.model('jobs');
@@ -43,10 +44,10 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
     if (req.file) {
         const job = new Job({
             jobId: req.body.jobId,
-            date: Date.now(),
+            date: moment().format(),
             description: req.body.description,
-            year: req.body.year,
-            month: req.body.month,
+            year: moment().format('YYYY'),
+            month: moment().format('MM'),
             faultImage: req.file.path,
             machineId: req.body.machineId,
             createOperatorId: req.body.createOperatorId,
@@ -61,10 +62,10 @@ router.post('/', upload.single('faultImage'), async (req, res) => {
     } else {
         const job = new Job({
             jobId: req.body.jobId,
-            date: Date.now(),
+            date: moment().format(),
             description: req.body.description,
-            year: req.body.year,
-            month: req.body.month,
+            year: moment().format('YYYY'),
+            month: moment().format('MM'),
             machineId: req.body.machineId,
             createOperatorId: req.body.createOperatorId,
             assignEngineerId: req.body.assignEngineerId
@@ -104,7 +105,9 @@ router.get('/job/:machineId', async (req, res) => {
 
 //get today jobs
 router.get('/today', async (req, res) => {
-    const todayJobs = await Job.find({ date : { $lt: new Date(), $gte: new Date(new Date().setDate(new Date().getDate()-1)) } }, {_id:1})
+    var start = moment().startOf('day');
+    var end = moment().endOf('day');
+    const todayJobs = await Job.find({ date: {$gte: start, $lt: end} })
 
     res.json({
         todayJobs
