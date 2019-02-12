@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 require('../../models/relationships/Solve');
 const Solve = mongoose.model('solves');
 
 require('../../models/relationships/JobFault');
 const JobFault = mongoose.model('jobFaults');
+
+require('../../models/Job');
+const Job = mongoose.model('jobs');
+
+require('../../models/relationships/AssignTechnician');
+const AssignTechnician = mongoose.model('assignTechnicians');
 
 //set Job Fault
 router.post('/', async (req, res) => {
@@ -22,11 +29,10 @@ router.post('/', async (req, res) => {
     const solve = new Solve({
         jobId: req.body.jobId,
         technicianId: req.body.technicianId,
-        startTime: Date.now(),
+        startTime: moment().format(),
         endTime: req.body.endtTime,
-        year: req.body.year,
-        month:req.body.month,
-        status: req.body.status,
+        year: moment().format('YYYY'),
+        month: moment().format('MM'),
         mark: req.body.mark
     })
     await solve.save()
@@ -45,14 +51,26 @@ router.post('/', async (req, res) => {
 //     })
 // })
 
+//complete the job
+router.patch('/setComplete/:jobId', async (req, res) => {
+    await Solve.findOneAndUpdate({ jobId: req.params.jobId }, { $set: { status: "complete" } })
+        .then(() => {
+            res.json({
+                success: "success"
+            })
+        })
+})
+
 //get completed Jobs 
-router.get('/complete/', async (req, res) => {
+router.get('/complete', async (req, res) => {
     const completedJobs = await Solve.find({status:"complete"},{jobId:1, _id:0})
-    for (let j = 0; j < completedJobs.length; j++) {
-        const faultsInAJob = await JobFault.find({jobId: completedJobs[j].jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
-        var faultsInAJobs = []
-        for (let i = 0; i < faultsInAJob.length; i++) {
-            faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+    var faultsInAJobs = []
+    if (completedJobs) {
+        for (let j = 0; j < completedJobs.length; j++) {
+            const faultsInAJob = await JobFault.find({jobId: completedJobs[j].jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+            for (let i = 0; i < faultsInAJob.length; i++) {
+                faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+            }
         }
     }
     res.json({
@@ -60,20 +78,77 @@ router.get('/complete/', async (req, res) => {
     })
 })
 
-//get incompleted Jobs 
-router.get('/incomplete/', async (req, res) => {
-    const completedJobs = await Solve.find({status:"incomplete"},{jobId:1, _id:0})
-    for (let j = 0; j < completedJobs.length; j++) {
-        const faultsInAJob = await JobFault.find({jobId: completedJobs[j].jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
-        var faultsInAJobs = []
-        for (let i = 0; i < faultsInAJob.length; i++) {
-            faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+//get today completed Jobs 
+router.get('/todayComplete', async (req, res) => {
+    var start = moment().startOf('day');
+    var end = moment().endOf('day');
+    const todayJobs = await Job.find({date: {$gte: start, $lt: end}},{_id:1})
+    var todayCompleteJobs = []
+    var todayIncompleteJobs = []
+    for (let i = 0; i < todayJobs.length; i++) {
+        const completedJobsToday = await Solve.findOne({jobId: todayJobs[i]._id, status:"complete"},{jobId:1,_id:0})
+        const incompletedJobsToday = await Solve.findOne({jobId: todayJobs[i]._id, status:"incomplete"},{jobId:1,_id:0})
+        if (completedJobsToday) {
+            todayCompleteJobs.push(completedJobsToday)
+        }
+        if (incompletedJobsToday) {
+            todayIncompleteJobs.push(incompletedJobsToday)
+        }
+    }
+    const allJobs = await Job.find({}, { _id: 1 })
+    var pendingJobs = [];
+    for (let i = 0; i < allJobs.length; i++) {
+        const assignTechnicians = await AssignTechnician.findOne({ jobId: allJobs[i]._id })
+        if (!assignTechnicians) {
+            const pendingJob = await Job.findById(allJobs[i]._id, { _id: 1 })
+            pendingJobs.push(pendingJob)
         }
     }
     res.json({
-        completedJobsDetails: faultsInAJobs
+        todayAllJobs: pendingJobs.length,
+        todayCompletedJobs: todayCompleteJobs.length,
+        todayIncompletedJobs: todayIncompleteJobs.length,
+        todayPendingJobs: todayJobs.length
     })
 })
+
+//get incompleted Jobs 
+router.get('/incomplete', async (req, res) => {
+    const incompletedJobs = await Solve.find({status:"incomplete"},{jobId:1, _id:0})
+    console.log(incompletedJobs)
+    var faultsInAJobs = []
+    if (incompletedJobs) {
+        for (let j = 0; j < incompletedJobs.length; j++) {
+            const faultsInAJob = await JobFault.find({jobId: incompletedJobs[j].jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+            for (let i = 0; i < faultsInAJob.length; i++) {
+                faultsInAJobs.push( { _id:faultsInAJob[i].jobId._id, jobId: faultsInAJob[i].jobId.jobId, date: faultsInAJob[i].jobId.date, description: faultsInAJob[i].jobId.description, faultImage: faultsInAJob[i].jobId.faultImage,serialNumber: faultsInAJob[i].jobId.machineId.serialNumber, departmentName: faultsInAJob[i].jobId.machineId.departmentId.departmentName, faultName:faultsInAJob[i].faultId.faultName, faultCategoryName:faultsInAJob[i].faultId.faultCategoryId.faultCategoryName} )
+            }
+        }
+    }
+    res.json({
+        incompletedJobsDetails: faultsInAJobs
+    })
+})
+
+//get today incompleted Jobs 
+router.get('/todayIncomplete', async (req, res) => {
+    var start = moment().startOf('day');
+    var end = moment().endOf('day');
+    const todayJobs = await Job.find({date: {$gte: start, $lt: end}},{_id:1})
+
+    var faultsInAJobs = []
+    for (let i = 0; i < todayJobs.length; i++) {
+        const completedJobsToday = await Solve.findOne({jobId: todayJobs[i]._id, status:"incomplete"},{jobId:1,_id:0})
+        if (completedJobsToday) {
+        const faultDetails = await JobFault.findOne({jobId: completedJobsToday.jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+            faultsInAJobs.push(faultDetails)
+        }
+    }
+    res.json({
+        todayIncompletedJobsDetails: faultsInAJobs
+    })
+})
+
 
 
   //get job details of a machine without uning an array

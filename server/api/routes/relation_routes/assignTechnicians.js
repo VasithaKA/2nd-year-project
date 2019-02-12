@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 require('../../models/relationships/AssignTechnician');
 const AssignTechnician = mongoose.model('assignTechnicians');
@@ -10,6 +11,9 @@ const Job = mongoose.model('jobs');
 
 require('../../models/relationships/JobFault');
 const JobFault = mongoose.model('jobFaults');
+
+require('../../models/relationships/Solve');
+const Solve = mongoose.model('solves');
 
 //set Assign Technician
 router.post('/', async (req, res) => {
@@ -25,7 +29,9 @@ router.post('/', async (req, res) => {
     const assignTechnician = new AssignTechnician({
         jobId: req.body.jobId,
         technicianId: req.body.technicianId,
-        date: Date.now()
+        date: moment().format(),
+        year: moment().format('YYYY'),
+        month: moment().format('MM'),
     })
     await assignTechnician.save()
         .then(() => res.json({
@@ -35,21 +41,39 @@ router.post('/', async (req, res) => {
         )
 })
 
-//accept
-router.post('/accept/', async (req, res) => {
+//accept the job
+router.post('/accept', async (req, res) => {
     await AssignTechnician.findOneAndUpdate({ jobId: req.body.jobId }, { $set: { accept: req.body.accept } })
-        .then(() => {
-            res.json({
-                success: true
-            })
+    .then(() => {
+        const solve = new Solve({
+            jobId: req.body.jobId,
+            technicianId: req.body.technicianId,
+            startTime: moment().format(),
+            endTime: req.body.endtTime,
+            year: moment().format('YYYY'),
+            month: moment().format('MM'),
+            mark: req.body.mark
         })
+        solve.save()
+        .then(() => res.json({
+            success: true,
+            message: "Set job!"
+        })
+        )
+    })
 })
 
-//get Assign Technician Details
+//get Assign job Details
 router.get('/technician/:technicianId', async (req, res) => {
-    const assignTechnicianJobs = await AssignTechnician.find({ technicianId: req.params.technicianId }).populate('jobId')
+    const assignTechnicianJobs = await AssignTechnician.find({ technicianId: req.params.technicianId },{jobId:1, date:1, accept:1, _id:0})
+    var jobToDo = []
+    for (let i = 0; i < assignTechnicianJobs.length; i++) {
+        const jobs = await JobFault.findOne({jobId: assignTechnicianJobs[i].jobId}).populate({ path: 'jobId', populate: { path: 'machineId', populate: { path: 'departmentId' } } }).populate({ path: 'faultId', populate: { path: 'faultCategoryId' } })
+        jobToDo.push({jobs, solvedetails: {date:assignTechnicianJobs[i].date,accept:assignTechnicianJobs[i].accept}})
+    }
+
     res.json({
-        assignTechnicianJobs: assignTechnicianJobs
+        assignTechnicianJobs: jobToDo
     })
 })
 
@@ -67,10 +91,17 @@ router.get('/job/:jobId', async (req, res) => {
     }
 })
 
-//pending jobs
-router.get('/pending/', async (req, res) => {
-    const allJobs = await Job.find({}, { _id: 1 })
+//Not accept job
+router.get('/notAccept', async (req, res) => {
+    const notAcceptJobs = await AssignTechnician.find({ accept: false }).populate('technicianId').populate('jobId')
+    res.json({
+        notAcceptJobs
+    })
+})
 
+//pending jobs
+router.get('/pending', async (req, res) => {
+    const allJobs = await Job.find({}, { _id: 1 })
     var pendingJobs = [];
     for (let i = 0; i < allJobs.length; i++) {
         const assignTechnicians = await AssignTechnician.findOne({ jobId: allJobs[i]._id })
@@ -94,6 +125,8 @@ router.get('/pending/', async (req, res) => {
         pendingJobs: faultsInAJobs
     })
 })
+
+
 
 //get job details of a machine without uning an array
 router.get('/jobs/:technicianId/:year', function (req, res) {
