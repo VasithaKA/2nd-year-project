@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+<div class="row margin-top">
+  <div class="col-6">
+    <table class="table ml-2">
+      <thead>
+        <tr class="table-primary">
+          <th scope="col" colspan="3">userTypeName</th>
+        </tr>
+      </thead>
+      <tbody class="table-hover">
+        <tr *ngFor="let employeeType of employeeTypes" class="table-light">
+          <td>{{employeeType.employeeTypeName}}</td>
+          <td>
+            <div *ngFor="let userCanDo of userCanDos">
+              <a *ngIf="userCanDo.roleId.roleNumber == 10 && employeeType.employeeTypeName != 'Administrator'" class="btn btn-outline-primary btn-sm" [routerLink]="['/setRoles/', employeeType._id]"
+                role="button">Set Roles</a>
+            </div>
+          </td>
+          <td>
+            <a *ngIf="employeeType.employeeTypeName != 'Administrator'" class="btn btn-outline-primary btn-sm"
+              [routerLink]="['/userType/edit/', employeeType._id]" role="button">Edit</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-6">
+    <div class="form-background">
+      <h3 class="form-topic">Add a new Usertype</h3>
+      <form [formGroup]="formUserType" (submit)="addUserType($event)">
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+          <label for="employeeTypeName">Employee Type Name</label>
+          <input formControlName="employeeTypeName" type="text" class="form-control" autocomplete="off" id="employeeTypeName"
+            style="text-transform: capitalize;" placeholder="Enter Employee Type Name">
+          <div *ngIf="employeeTypeName.touched && employeeTypeName.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="employeeTypeName.errors.required">*Employee Type Name is required.</div>
+            <div *ngIf="employeeTypeName.errors.shouldBeUnique">*Employee Type Name is already taken.</div>
+            <div *ngIf="employeeTypeName.errors.pattern">*Can only use letters for Employee Type Name.</div>
+            <div *ngIf="employeeTypeName.errors.minlength">*Employee Type Name should be minimum
+              {{employeeTypeName.errors.minlength.requiredLength}} characters.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Back</button>
+      </form>
+    </div>
+  </div>
+</div>

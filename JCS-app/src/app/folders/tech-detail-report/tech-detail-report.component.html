@@ -1,0 +1,123 @@
+<app-nav></app-nav>
+   
+    <!--<div class="section" *ngFor="let machine of machines">
+          <p>{{machine.department}}</p>
+      </div>
+      <p>{{machine.serialNo}}</p>
+      <p>{{machine.department}}</p>
+      <p>{{machine.location}}</p>-->
+      <!-- <div class="body">
+        <br>
+      <div class="row">
+          <br><br>
+          <div class="col-3">
+      
+        <div class="container">
+          <h3>TechnicianDetail</h3>
+          <dl class="list">
+            <dt>RegNo</dt>
+            <dd>{{ technician.regNo }}</dd>
+            <dt>Name</dt>
+            <dd>{{ technician.name }}</dd>
+            <dt>Employee Type</dt>
+            <dd>{{ technician.empType }}</dd>
+            <dt>Department</dt>
+            <dd>{{ technician.department }}</dd>
+            <dt>TelNo</dt>
+            <dd>{{technician.telNo }}</dd>
+          </dl>
+          </div>
+        </div>
+        <div class="col-1"></div>
+          <div class="col-8">
+            <h3>TechnicianReport</h3>
+            <h6>No of Assigend Jobs per Month</h6>
+            <div style="width: 700px; height: 50%"><canvas id="lineChart"></canvas></div>
+            <h6>No of Completed Jobs per Month</h6>
+            <div style="width: 700px; height: 50%"><canvas id="lineChart1"></canvas></div>
+          </div>
+         </div>
+         </div> -->
+         <div class="body">
+            <br><br><br><br><br><br>
+        <div class="container">
+          <div class="card" style="background-color: transparent; border: transparent">
+              <div class="card-header bg-danger">
+                 <h1 style="color:white;"><b><i class="fas fa-user-alt"></i> {{technician.firstName}} {{technician.lastName}}</b></h1>
+                 <h4 style="color:white;"><i class="fas fa-user-tag"></i> {{technician.userName}}</h4>
+                 <h4 style="color:white;"><i class="fas fa-id-card-alt"></i> {{technician.employeeId}}</h4>
+                </div>
+             <div class="card-body" style="background-color: transparent;">
+               <div class="container">
+               <div class="row">
+                <div class="col-5">
+                    <div class="card border-danger mb-3" style="background-color: transparent;">
+                        <div class="card-body text-dark">
+                          <h5 class="card-title"><i class="far fa-building"></i> Department<br> {{technician.departmentId.departmentName}}</h5>
+                          <p class="card-text"></p>
+                        </div>
+                </div>
+                </div>
+               <div class="col-2"></div>
+                <div class="col-5">
+                    <!-- <div class="card border-danger mb-3" style="background-color: transparent;">
+                        <div class="card-body text-dark">
+                          <h5 class="card-title"><i class="fas fa-dumbbell"></i> Expertise<br>{{technician.profilePicture}}</h5>
+                          <p class="card-text"></p>
+                        </div>
+                </div> -->
+              <p class="card-text"></p>
+            </div>
+          </div>
+            </div>
+            <div class="container">
+                <div class="card border-danger mb-8" style="background-color: transparent;">
+                    <div class="card-body">
+                        <div class="container">
+                           
+                                <h5><b>No of Assigend Jobs per Month of {{year}}</b></h5>
+                                <div style="background-color: white;
+                                opacity: 0.70; width: 700px; height: 50%"><canvas id="lineChart"></canvas></div>
+                                  <a (click)="discreate()" class="previous" style="background-color:transparent"> <i class="far fa-arrow-alt-circle-left"></i> Previous  </a>
+                                  <a (click)="increate()" class="next" style="background-color:transparent">Next <i class="far fa-arrow-alt-circle-right"></i></a> 
+                          </div> 
+                       </div>
+                  </div>
+                  <br><br>
+                  <div class="card border-danger mb-8" style="background-color: transparent; ">
+                      <div class="card-body">
+                          <div class="container">
+                               <h5><b>No of Completed Jobs per Month of {{year1}}</b></h5>
+                                  <div style="background-color: white;
+                                  opacity: 0.70; width: 700px; height: 50%"><canvas id="lineChart1"></canvas></div>
+                                  <a (click)="decret()" class="previous"style="background-color:transparent"> <i class="far fa-arrow-alt-circle-left"></i> Previous  </a>
+                                  <a (click)="incret()" class="next" style="background-color:transparent">Next <i class="far fa-arrow-alt-circle-right"></i></a> 
+                                  
+                                  
+                            </div> 
+                         </div>
+                    </div>
+              <!-- <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <h6>No of Assigend Jobs per Month</h6>
+                    <div style="width: 700px; height: 50%"><canvas id="lineChart"></canvas></div>
+                 </div>
+                 <div class="col-1">
+                    <a href="#" class="next">Next &#8250;</a>
+                 </div>
+              </div> -->
+              <!-- <div class="row">
+                  <div class="col-1"></div>
+                  <div class="col-10">
+                      <h6>No of Completed Jobs per Month</h6>
+                      <div style="width: 700px; height: 50%"><canvas id="lineChart1"></canvas></div>
+                   </div>
+                   <div class="col-1"></div>
+                </div> -->
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <br><br><br><br><br><br><br><br><br><br>

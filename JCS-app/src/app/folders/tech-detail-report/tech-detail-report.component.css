@@ -1,0 +1,61 @@
+/* .body{
+    background-image: url('/assets/Shopping Background-05.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    width: auto;
+    height: auto;
+    
+} */
+
+/* .card-header {
+    animation-duration: 4s;
+    animation-name: slidein;
+}
+
+  @keyframes slidein {
+    from {
+      margin-right: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-right: 0%;
+      width: 100%;
+    }
+  } */
+.next{
+    background-color: #f1f1f1;
+  color: black;
+}
+
+.previous{
+    background-color: #f1f1f1;
+  color: black;
+  padding-right: 1rem;
+}
+
+.card border-secondary{
+    align-self: center;
+    background-color: transparent;
+}
+
+/* .card-body{
+    background-color: transparent;
+    border: none;
+    animation-duration: 4s;
+    animation-name: slidein;
+    margin-right: 100px;
+}
+  
+  @keyframes slidein {
+    from {
+      margin-right: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-right: 0%;
+      width: 100%;
+    }
+  } */

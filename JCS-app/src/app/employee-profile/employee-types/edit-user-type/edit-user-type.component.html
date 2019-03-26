@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+
+<div class="container margin-top">
+  <div class="row">
+    <div class="col-6">
+      <div class="form-background">
+        <h3 class="form-topic">Edit Usertype</h3>
+        <form [formGroup]="formUserType" (submit)="updateUserType($event)">
+          <div class="form-group">
+            <label for="employeeTypeName">Employee Type Name</label>
+            <input formControlName="employeeTypeName" type="text" class="form-control" autocomplete="off" id="employeeTypeName" style="text-transform: capitalize;">
+            <div *ngIf="employeeTypeName.touched && employeeTypeName.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="employeeTypeName.errors.required">*Employee Type Name is required.</div>
+              <div *ngIf="employeeTypeName.errors.shouldBeUnique">*Employee Type Name is already taken.</div>
+              <div *ngIf="employeeTypeName.errors.pattern">*Can only use letters for Employee Type Name.</div>
+              <div *ngIf="employeeTypeName.errors.minlength">*Employee Type Name should be minimum {{employeeTypeName.errors.minlength.requiredLength}} characters.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-danger ml-4" value="delete" (click)="deleteUserType()">Delete</button>
+          <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Cancele</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

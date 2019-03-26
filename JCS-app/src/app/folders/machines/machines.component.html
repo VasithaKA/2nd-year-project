@@ -1,0 +1,64 @@
+<app-nav></app-nav>
+  <div class="body">
+      <br><br>
+      <div class="row">
+          <div class="col-2"></div>
+          <div class="col-3"><br><br><br>
+            <h3 style="color:white;"><b>List of Machines</b></h3>
+              <!--<div class="section" *ngFor="let machine of machines">-->
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th><i class="fas fa-id-card-alt"></i> Serial No</th>
+                          <th><i class="far fa-building"></i> Department</th>
+                          <th>More Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let machine of machines">
+                          <td>{{ machine.serialNumber }}</td>
+                          <td>{{ machine.departmentId.departmentName }}</td>
+                          <!-- <td><button class="btn btn-danger" [routerLink]="['/machines', machine._id,2019]">Show Details>></button></td> -->
+                          <td><button class="btn btn-danger" [routerLink]="['/machines', machine._id,2019]">Show Detail>></button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br><br><br><br>
+             <!-- </div>-->
+         </div>
+         <div class="col-3"></div>
+          <div class="col-4">
+            <div class="img"></div>
+          </div>
+
+
+   
+</div>
+
+
+     
+<!--<div class="row">
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"><p>SerialNo</p> </div>
+    <div class="col">Department</div>
+    <div class="col"></div>
+    <div class="col"></div>
+  </div>
+  
+  <div class="section"(click) ="onSelect(item)" *ngFor="let item of machines">
+      <div class="row">
+          <div class="col"></div>
+          <div class="col"></div>
+          <div class="col"><p>{{item.serialNo}}</p> </div>
+          <div class="col">{{item.department}}</div>
+          <div class="col"></div>
+          <div class="col"></div>
+        </div>
+  </div>-->
+  <!--<button (click)="gotoProductDetails('/machine',item.serialNo)">Go To Details</button>
+  <ul>
+    <li *ngFor="let item of machines">
+        <a [routerLink]="['/machine/',item.serialNo]"></a> <button (click)="gotoProductDetails('/machine/',item.serialNo)">Go To Details</button>
+    </li>
+</ul>-->

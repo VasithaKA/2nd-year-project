@@ -1,0 +1,39 @@
+<app-nav></app-nav>
+<div class="body">
+<div class="container">
+  <br><br><br><br><br><br>
+  <div class="row">
+    <div class="col-2">
+      </div>
+    <div class="col-8">
+        <div class="card" style="background-color:transparent">
+            <div class="card-header">
+              <h3>Ranking Report</h3>
+            </div>
+            <div class="card-body" style="background-color:white; opacity:0.6">
+              <h5 class="card-title">Success Rate of the Technician</h5>
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Technician Id</th>
+                      <th scope="col">Technician Name</th>
+                      <th scope="col">Success Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let a of employees" >
+                   <!-- <app-rank [firstName]="a.firstName" [lastName]="a.lastName" [id]="a.employeeId"></app-rank> -->
+                   <tr>
+                      <td scope="col">{{a.employeeId}}</td>
+                      <td scope="col">{{a.firstName}} {{a.lastName}}</td>
+                      <td scope="col"><app-rank [id]="a._id"></app-rank></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</div>
+<br><br><br><br><br><br><br><br>
+</div>

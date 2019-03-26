@@ -1,0 +1,27 @@
+<app-navbar></app-navbar>
+
+<div class="container margin-top">
+  <div class="row">
+    <div class="col-6">
+      <div class="form-background">
+        <h3 class="form-topic">Edit Department</h3>
+        <form [formGroup]="department" (submit)="updateDepartmentName($event)">
+          <div class="form-group">
+            <label for="departmentName">Department Name</label>
+            <input formControlName="departmentName" type="text" class="form-control" autocomplete="off" id="departmentName"
+              style="text-transform: capitalize;">
+            <div *ngIf="departmentName.touched && departmentName.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="departmentName.errors.required">*Department Name is required.</div>
+              <div *ngIf="departmentName.errors.pattern">*Can only use letters for Employee Type Name.</div>
+              <div *ngIf="departmentName.errors.minlength">*Employee Type Name should be minimum
+                {{departmentName.errors.minlength.requiredLength}} characters.</div>
+              <div *ngIf="departmentName.errors.shouldBeUnique">*Department Name is already taken.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Update</button>
+          <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Back</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

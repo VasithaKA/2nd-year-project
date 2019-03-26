@@ -1,0 +1,155 @@
+<app-navbar></app-navbar>
+
+<div class="row margin-top">
+  <div class="form-background col-md-5 mx-auto">
+    <h2 class="form-topic">Edit User Details</h2>
+    <form [formGroup]="form" (submit)="updateUser($event)" *ngIf="employee">
+
+      <div *ngIf="!changingImage && !changepassword">
+
+        <a role="button" class="btn" (click)="changingImageClick()">
+          <img *ngIf="croppedImage == null" src={{imageUrl}} class="rounded-circle" width="128" height="128" />
+          <img *ngIf="croppedImage != null" [src]="croppedImage" class="rounded-circle" width="128" height="128" />
+        </a>
+
+        <div *ngIf="user.employeeTypeId.employeeTypeName == 'Administrator'" class="form-group">
+          <label for="employeeId">Employee Id</label>
+          <input formControlName="employeeId" type="text" autocomplete="off" class="form-control" id="employeeId"
+            aria-describedby="emailHelp">
+          <div *ngIf="employeeId.touched && employeeId.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="employeeId.errors.required">*Employee Id is required.</div>
+            <div *ngIf="employeeId.errors.shouldBeUnique">*Employee Id is already taken.</div>
+            <div *ngIf="employeeId.errors.pattern">*Employee Id should be 7 numbers and Uppercase letter. eg:- ######A</div>
+            <!-- <div *ngIf="employeeId.errors.minlength">*Employee Id should be
+              {{employeeId.errors.minlength.requiredLength}} characters.</div>
+            <div *ngIf="employeeId.errors.maxlength">*Employee Id should be
+              {{employeeId.errors.maxlength.requiredLength}} characters.</div> -->
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col">
+            <label for="firstName">First Name</label>
+            <input formControlName="firstName" type="text" class="form-control" autocomplete="off" id="firstName"
+              aria-describedby="emailHelp" style="text-transform: capitalize;">
+            <div *ngIf="firstName.touched && firstName.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="firstName.errors.required">*First Name is required.</div>
+              <div *ngIf="firstName.errors.pattern">*Only use letters for First Name .</div>
+              <div *ngIf="firstName.errors.minlength">*First Name should be
+                {{firstName.errors.minlength.requiredLength}} characters.</div>
+            </div>
+          </div>
+          <div class="col">
+            <label for="lastName">Last Name</label>
+            <input formControlName="lastName" type="text" class="form-control" autocomplete="off" id="lastName"
+              aria-describedby="emailHelp" style="text-transform: capitalize;">
+            <div *ngIf="lastName.touched && lastName.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="lastName.errors.required">*Last Name is required.</div>
+              <div *ngIf="lastName.errors.pattern">*Only use letters for Last Name .</div>
+              <div *ngIf="lastName.errors.minlength">*Last Name should be {{lastName.errors.minlength.requiredLength}}
+                characters.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userName">User Name</label>
+          <input formControlName="userName" type="text" autocomplete="off" class="form-control" id="userName"
+            aria-describedby="emailHelp" style="text-transform: capitalize;">
+          <div *ngIf="userName.touched && userName.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="userName.errors.required">*User Name is required.</div>
+            <div *ngIf="userName.errors.shouldBeUnique">*User Name is already taken.</div>
+            <div *ngIf="userName.errors.cannotCantainSpace">*User Name cannot cantain space.</div>
+            <div *ngIf="userName.errors.pattern">*Can only use letters for User Name.</div>
+            <div *ngIf="userName.errors.minlength">*User Name should be minimum
+              {{userName.errors.minlength.requiredLength}} characters.</div>
+          </div>
+        </div>
+
+        <div *ngIf="user.employeeTypeId.employeeTypeName == 'Administrator'" class="form-group">
+          <label for="departmentId">Department Name</label>
+          <div class="input-group">
+            <select class="custom-select" id="departmentId" aria-label="Example select with button addon" style="text-transform: uppercase;">
+              <option *ngFor="let department of departments" style="text-transform: uppercase;" value="{{department._id}}">{{department.departmentName}}</option>
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" routerLink="/department">Add new Department</button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="user.employeeTypeId.employeeTypeName == 'Administrator'" class="form-group">
+          <label for="employeeTypeId">Employee Type</label>
+          <div class="input-group">
+            <select class="custom-select" id="employeeTypeId" aria-label="Example select with button addon">
+              <option *ngFor="let employeeType of employeeTypes" value="{{employeeType._id}}">{{employeeType.employeeTypeName}}</option>
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" routerLink="/userType">Add new type</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn btn-info" value="changePassword" (click)="changePassword()">Change The
+          Password</button>
+        <button *ngIf="user._id != id" type="button" class="btn btn-danger ml-5" value="delete" (click)="deactivate()"><span *ngIf="employee.active == true">Deactivate this account</span> <span *ngIf="employee.active == false">Activate this account</span> </button>
+        <div>
+          <button type="submit" class="btn btn-primary mt-3" value="submit">Save</button>
+          <button type="button" class="btn btn-secondary ml-5 mt-3" (click)="goBack()">Go Back</button>
+        </div>
+
+      </div>
+
+      <div *ngIf="changingImage">
+
+        <div class="form-group">
+          <label for="profilePicture">Profile Picture</label>
+          <div class="input-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="profilePicture" aria-describedby="inputGroupFileAddon01"
+                accept="image/*" (change)="fileChangeEvent($event)">
+              <label *ngIf="profilePicture == null" class="custom-file-label" for="profilePicture">Choose file...</label>
+              <label *ngIf="profilePicture != null" class="custom-file-label" for="profilePicture">{{profilePicture.name}}</label>
+            </div>
+          </div>
+        </div>
+
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1"
+          [resizeToWidth]="autocomplete" format="png" (imageCropped)="imageCropped($event)"></image-cropper>
+
+        <button class="btn btn-primary" type="button" (click)="saveNewImage()">Uptate</button>
+        <button type="button" class="btn btn-danger ml-5" value="delete" (click)="cancelImage()">Cancel</button>
+
+      </div>
+
+      <div *ngIf="changepassword">
+
+        <form [formGroup]="form" (submit)="savePassword($event)">
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input formControlName="password" type="password" autocomplete="off" class="form-control" id="password">
+            <div *ngIf="password.touched && password.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="password.errors.required">*Password is required.</div>
+              <!-- <div *ngIf="password.errors.pattern">*Password must contain at least one number, and one uppercase and lowercase letter.</div> -->
+              <div *ngIf="password.errors.minlength">*Password should be minimum
+                {{password.errors.minlength.requiredLength}} characters.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cpassword">Confirm Password</label>
+            <input formControlName="cpassword" type="password" autocomplete="off" class="form-control" id="cpassword">
+            <div *ngIf="isNotMatch" class="alert-danger bg-transparent">*Passwords are not matched.</div>
+          </div>
+
+          <button type="submit" value="submit" class="btn btn-primary">Change Password</button>
+          <button type="button" class="btn btn-danger ml-5" (click)="cancelPassword()">Cancel</button>
+
+        </form>
+
+      </div>
+
+    </form>
+  </div>
+</div>

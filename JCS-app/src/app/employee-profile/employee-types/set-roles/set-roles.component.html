@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+
+<div *ngIf="employeeRoles && employeeType" class="row margin-top">
+  <div class="card ml-5" style="width: 30rem;">
+    <div class="card-body">
+      <form [formGroup]="myForm" (ngSubmit)="setRole(myForm.value)">
+        <h5 class="card-title">{{employeeType.employeeTypeName}}</h5>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check0" type="checkbox" class="form-check-input" id="{{employeeRoles[0].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[0].roleId._id}}">{{employeeRoles[0].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check1" type="checkbox" class="form-check-input" id="{{employeeRoles[1].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[1].roleId._id}}">{{employeeRoles[1].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check2" type="checkbox" class="form-check-input" id="{{employeeRoles[2].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[2].roleId._id}}">{{employeeRoles[2].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check3" type="checkbox" class="form-check-input" id="{{employeeRoles[3].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[3].roleId._id}}">{{employeeRoles[3].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check4" type="checkbox" class="form-check-input" id="{{employeeRoles[4].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[4].roleId._id}}">{{employeeRoles[4].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check5" type="checkbox" class="form-check-input" id="{{employeeRoles[5].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[5].roleId._id}}">{{employeeRoles[5].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check6" type="checkbox" class="form-check-input" id="{{employeeRoles[6].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[6].roleId._id}}">{{employeeRoles[6].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check7" type="checkbox" class="form-check-input" id="{{employeeRoles[7].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[7].roleId._id}}">{{employeeRoles[7].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check8" type="checkbox" class="form-check-input" id="{{employeeRoles[8].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[8].roleId._id}}">{{employeeRoles[8].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check9" type="checkbox" class="form-check-input" id="{{employeeRoles[9].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[9].roleId._id}}">{{employeeRoles[9].roleId.roleName}}</label>
+        </div>
+
+        <div class="form-check ml-5 mt-2">
+          <input formControlName="check10" type="checkbox" class="form-check-input" id="{{employeeRoles[10].roleId._id}}">
+          <label class="form-check-label" for="{{employeeRoles[10].roleId._id}}">{{employeeRoles[10].roleId.roleName}}</label>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        <img *ngIf="store" src="assets/loading.gif" width="auto" height="30px" class="mt-4 ml-2">
+        <button type="button" class="btn btn-secondary ml-5 mt-4" value="goBack" (click)="goBack()">Back</button>
+      </form>
+    </div>
+    <!-- <pre>Form values: {{myForm.value | json}}</pre> -->
+  </div>
+</div>
+
+<div *ngIf="!roles && !employeeType">
+  <img src="assets/page-loader.gif" width="auto" height="200px" class="positionLoader">
+</div>

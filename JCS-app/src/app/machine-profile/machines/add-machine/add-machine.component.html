@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+
+<div class="row margin-top">
+  <div class="col-md-5 mx-auto form-background">
+    <div class="bg-transparent">
+      <h3 class="form-topic">Register Machine Details</h3>
+      <form [formGroup]="form" (submit)="registerMachine($event)">
+        <div class="form-group">
+          <label for="serialNumber">Serial Number</label>
+          <input formControlName="serialNumber" type="text" autocomplete="off" class="form-control" id="serialNumber"
+            aria-describedby="emailHelp" placeholder="Serial Number">
+          <div *ngIf="serialNumber.touched && serialNumber.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="serialNumber.errors.required">*Serial Number is required.</div>
+            <div *ngIf="serialNumber.errors.shouldBeUnique">*Serial Number is already taken.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input formControlName="location" type="text" autocomplete="off" class="form-control" id="location"
+            aria-describedby="emailHelp" placeholder="Location">
+          <div *ngIf="location.touched && location.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="location.errors.required">*Location is required.</div>
+            <div *ngIf="location.errors.pattern">*Only use Numbers.</div>
+            <!-- <div *ngIf="location.errors.shouldBeUnique">*Location is already taken.</div> -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="departmentId">Department Name</label>
+          <div class="input-group">
+            <select class="custom-select" id="departmentId" aria-label="Example select with button addon" style="text-transform: uppercase;">
+              <option *ngFor="let department of departments" style="text-transform: uppercase;" value="{{department._id}}">{{department.departmentName}}</option>
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" routerLink="/department">Add new Department</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="supervisorId">Machine Supervisor's Name</label>
+          <div class="input-group">
+            <select class="custom-select" id="supervisorId" aria-label="Example select with button addon" style="text-transform: uppercase;">
+              <option *ngFor="let supervisor of supervisors" style="text-transform: uppercase;" value="{{supervisor._id}}">{{supervisor.firstName}}</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+</div>

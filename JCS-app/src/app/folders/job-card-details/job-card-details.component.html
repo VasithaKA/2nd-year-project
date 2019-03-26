@@ -1,0 +1,33 @@
+<app-nav></app-nav>
+
+<div class="body">
+    <br><br><br><br><br><br>
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-6">
+<div class="container">
+    <div class="card" style="background-color:transparent;">
+        <h3 class="card-header"><b>Job Details</b></h3>
+        <div class="card-body" style="background-color: white;
+        opacity: 0.70;">
+        <dl class="list">
+          <dt>Job Id</dt>
+          <dd>{{ job.jobId }}</dd>
+          <dt>Description</dt>
+          <dd>{{ job.description }}</dd>
+          <dt>Created Date</dt>
+          <dd>{{ job.date | date}}</dd>
+          <dt>Machine Serial Number</dt>
+          <dd>{{ job.machineId.serialNumber }}</dd>
+          <dt>Machine Operator Name</dt>
+          <dd>{{ job.createOperatorId.firstName }} {{ job.createOperatorId.lastName }}</dd>
+        </dl>
+      </div>
+      </div>
+</div>
+</div>
+<div class="col-3"></div>
+ </div>
+ </div>
+
+ 

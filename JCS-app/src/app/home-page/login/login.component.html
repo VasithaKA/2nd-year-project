@@ -1,0 +1,31 @@
+<app-home></app-home>
+
+<div class="row margin-top">
+  <div class="col-md-3 mx-auto form-background">
+    <div class="bg-transparent">
+      <h2 class="form-topic">Account Login</h2>
+      <form [formGroup]="form" (submit)="loginUser($event)">
+        <div class="form-group">
+          <label for="userId">UserId</label>
+          <input formControlName="userId" type="text" class="form-control bg-transparent" id="userId" aria-describedby="emailHelp"
+            placeholder="UserId">
+          <div *ngIf="userId.touched && userId.invalid" class="alert-danger bg-transparent">*UserId is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input formControlName="password" type="password" class="form-control bg-transparent" id="password"
+            placeholder="Password">
+          <div *ngIf="password.touched && password.invalid" class="alert-danger bg-transparent">*Password is
+            required.</div>
+        </div>
+        <div *ngIf="form.errors" class="text-danger bg-transparent">
+          <h6>*{{message}}</h6>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+  <div *ngIf="success">
+    <img src="assets/page-loader.gif" width="auto" height="200px" class="positionLoader">
+  </div>
+</div>

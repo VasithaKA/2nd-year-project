@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<div class="row margin-top">
+  <div class="col-6">
+    <div class="card border-dark ml-2">
+      <div class="card-header">
+        <h3>Faults Category Details</h3>
+      </div>
+      <div *ngFor="let category of categories" class="card border-primary ml-2 mr-2 mb-3">
+        <div class="card-body">
+          <h5 class="card-title font-weight-normal"><span class="font-weight-bold">{{category.faultCategoryName}}</span>
+            Category</h5>
+          <a class="btn btn-info btn-sm" [routerLink]="['/faultTypeCategory/edit/', category._id]">Edit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="form-background">
+      <h3 class="form-topic">Add a new Fault Category</h3>
+      <form [formGroup]="formFaultCategory" (submit)="addFaultCategory($event)">
+        <div class="form-group">
+          <label for="faultCategoryName">Category Name</label>
+          <input formControlName="faultCategoryName" type="text" class="form-control" autocomplete="off" id="faultCategoryName"
+            style="text-transform: capitalize;" placeholder="Enter Fault Category Name">
+          <div *ngIf="faultCategoryName.touched && faultCategoryName.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="faultCategoryName.errors.required">*Category Name is required.</div>
+            <div *ngIf="faultCategoryName.errors.pattern">*Can only use letters for Category Name.</div>
+            <div *ngIf="faultCategoryName.errors.minlength">*Category Name should be minimum
+              {{faultCategoryName.errors.minlength.requiredLength}} characters.</div>
+            <div *ngIf="faultCategoryName.errors.shouldBeUnique">*Category Name is already taken.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Back</button>
+      </form>
+    </div>
+  </div>
+</div>

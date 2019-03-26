@@ -1,0 +1,66 @@
+<app-navbar></app-navbar>
+
+<div class="card margin-top">
+    <h5 class="card-header">Profile</h5>
+    <div *ngIf="user" class="card-body">
+        <h3 class="mb-4">{{user.firstName}} Details</h3>
+        <div class="row">
+            <div class="col">
+                <div class="media">
+                    <img class="align-self-start rounded-circle mr-4"
+                        src="http://localhost:5000/{{user.profilePicture}}" width="auto" height="200"
+                        alt="profilePicture">
+                    <div class="media-body">
+                        <dl class="list">
+                            <dt class="mb-2 font-weight-normal">Name: <span
+                                    class="font-weight-light font-italic">{{ user.firstName }}
+                                    {{ user.lastName }}</span></dt>
+                            <dt class="mb-2 font-weight-normal">Employee Id: <span
+                                    class="font-weight-light font-italic">{{ user.employeeId }}</span></dt>
+                            <dt class="mb-2 font-weight-normal">User Name: <span
+                                    class="font-weight-light font-italic">{{ user.userName }}</span></dt>
+                            <dt class="mb-2 font-weight-normal">Employee Type: <span
+                                    class="font-weight-light font-italic">{{ user.employeeTypeId.employeeTypeName }}</span>
+                            </dt>
+                            <dt class="mb-2 font-weight-normal">Department: <span
+                                    class="font-weight-light font-italic">{{ user.departmentId.departmentName }}</span>
+                            </dt>
+                        </dl>
+                        <a class="btn btn-outline-primary btn-sm mb-1" [routerLink]="['/employees/edit', id]"
+                            role="button">Edit Profile</a>
+                        <button type="button" class="btn btn-outline-secondary btn-sm ml-5 mb-1"
+                            (click)="goBack()">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="expertsLength != 0" class="col">
+                <div *ngFor="let userRole of userRoles">
+                    <div *ngIf="userRole.roleId.roleNumber == 4">
+                        <dt class="mb-2 font-weight-normal">Expert for: <span *ngFor="let expert of experts"
+                                class="font-weight-light font-italic">{{ expert.faultCategoryId.faultCategoryName }}
+                                <br><span style="margin-left: 79px;"></span></span>
+                        </dt>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="machineLength != 0" class="col">
+                <div *ngFor="let userRole of userRoles">
+                    <div *ngIf="userRole.roleId.roleNumber == 5">
+                        <h5 class="mb-4">Supervised Machines Details</h5>
+                        <div *ngFor="let machine of machines" class="border border-primary rounded mb-2">
+                            <dt class="mb-2 font-weight-normal  ml-3">Serial Number: <span
+                                    class="font-weight-light font-italic">{{ machine.serialNumber }}</span>
+                            </dt>
+                            <dt class="mb-2 font-weight-normal  ml-3">Department: <span
+                                    class="font-weight-light font-italic">{{ machine.departmentId.departmentName }}</span>
+                            </dt>
+                            <dt class="mb-2 font-weight-normal  ml-3">Location: <span
+                                    class="font-weight-light font-italic">{{ machine.location }}</span>
+                            </dt>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

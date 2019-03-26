@@ -1,0 +1,36 @@
+<app-nav></app-nav>
+  <div class="body">
+      <br><br>
+      <div class="row">
+          <div class="col-2"></div>
+          <div class="col-3"><br><br><br>
+            <h3 style="color:white;"><b>List of Technicians</b></h3>
+            <br>
+              <!--<div class="section" *ngFor="let machine of machines">-->
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th><b><i class="fas fa-id-card-alt"></i> Technician Id</b></th>
+                          <th><b><i class="fas fa-user-tag"></i> Technician Name</b></th>
+                          <th><b>More Details</b></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let technician of technicians">
+                          <td><b>{{technician.employeeId}}</b> </td>
+                          <td><b>{{technician.firstName}} {{technician.lastName}}</b> </td>
+                          <td><button class="btn btn-danger" [routerLink]="['/Technician',technician._id,2019]">Show Detail>></button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                 <br><br><br><br>
+             <!-- </div>-->
+         </div>
+         <div class="col-3"></div>
+          <div class="col-4">
+            <div class="img"></div>
+          </div>
+
+
+   
+</div>

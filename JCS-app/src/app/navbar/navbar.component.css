@@ -1,0 +1,29 @@
+.dropdown-menu,.dropdown-divider{padding:0;margin:0;border:1 solid rgba(0,0,0,.15)}
+.mainmenu a,.mainmenu ul li a {font-size:16px;text-transform:capitalize;padding:10px 8px;font-family:'Roboto',sans-serif}
+
+.mainmenu ul ul li a:hover,.mainmenu form ul div a:hover{color: #fff;background: rgb(245, 67, 67);outline: 0;}
+
+
+/*==========Sub Menu=v==========*/
+
+.mainmenu .collapse ul ul,.mainmenu form ul div{background:rgb(192, 21, 21);}
+
+/******************************Drop-down menu work on hover**********************************/
+.mainmenu{background: none;border: 0 solid;margin: 0;padding: 0;min-height:10px;width: 100%;}
+@media only screen and (min-width: 350px) {
+.mainmenu .collapse ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul{position:absolute;top:100%;left:0;display:none}
+/*******/
+.mainmenu .collapse ul ul li{position:relative}
+.mainmenu .collapse ul ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul ul{position:absolute;top:0;left:100%;display:none}
+
+}
+@media only screen and (max-width: 350px) {
+.mainmenu .collapse ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul{position:absolute;top:100%;left:0;display:none}
+/*******/
+.mainmenu .collapse ul ul li{position:relative}
+.mainmenu .collapse ul ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul ul{position:absolute;top:100%;left:20%;display:none}
+}

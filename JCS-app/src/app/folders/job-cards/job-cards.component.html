@@ -1,0 +1,32 @@
+<app-nav></app-nav>
+ 
+  <div class="body">
+    <br><br><br><br><br>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-5">
+          <h3 style="color:white;"><b>List of Job Cards</b></h3>
+          <br>
+            <!--<div class="section" *ngFor="let machine of machines">-->
+                <table class="table">
+                    <thead>
+                      <tr>
+                          <th><i class="fas fa-id-card-alt"></i> Job No</th>
+                          <th>More Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr  *ngFor="let job of jobs">
+                        <td>{{ job.jobId }} </td>
+                       <!-- <td  *ngFor="let item of job">{{ item.serialNo }}</td>-->
+                        <td><button class="btn btn-danger" [routerLink]="['/jobCards', job._id]">Show Detail>></button></td>
+                      </tr>
+                          <!--<td>{{machine.serialNo}}</td>-->
+                         <!-- <td><a [routerLink]="['/jobCards', job._id]">Show Detail</a></td>-->
+                       
+                    </tbody>
+                  </table>
+                  <br><br><br><br><br>
+           <!-- </div>-->
+       </div>
+       

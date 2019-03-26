@@ -1,0 +1,32 @@
+.card-header{
+    background-color: crimson;
+}
+/* .body{
+    
+  background-image: url('/assets/Shopping Background-05.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: auto;
+  height: auto;
+} */
+.card-title{
+    text-align: center;
+}
+
+.card {
+    animation-duration: 4s;
+    animation-name: slidein;
+}
+
+  @keyframes slidein {
+    from {
+      margin-left: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }

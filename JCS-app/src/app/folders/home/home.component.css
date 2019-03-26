@@ -1,0 +1,69 @@
+.contaniner{
+    background-image: url('/assets/Shopping Background-02.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+
+.card1{
+    background-color: transparent;
+    border: none;
+    animation-duration: 4s;
+    animation-name: slidein;
+    margin-right: 100px;
+}
+  
+  @keyframes slidein {
+    from {
+      margin-left: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
+  .card2{
+    background-color: transparent;
+    border: none;
+    animation-duration: 3s;
+    animation-name: slidein;
+    margin-right: 100px;
+}
+  
+  @keyframes slidein {
+    from {
+      margin-left: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
+  .card3{
+    background-color: transparent;
+    border: none;
+    animation-duration: 2s;
+    animation-name: slidein;
+    margin-right: 100px;
+}
+  
+  @keyframes slidein {
+    from {
+      margin-left: 600%;
+      width: 200%; 
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
+
+  .btn-danger:hover, .btn-danger:focus, .btn:active, .btn-danger.active, .open>.dropdown-toggle.btn-danger {
+    color:red;
+    background-color: white;
+    border-color: red; /*set the color you want here*/
+}

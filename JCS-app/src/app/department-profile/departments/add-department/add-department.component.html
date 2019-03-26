@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+
+<div class="row margin-top">
+  <div class="col-6">
+    <div class="card border-dark ml-2">
+      <div class="card-header">
+        <h3>Department Name</h3>
+      </div>
+      <div *ngFor="let department of departments" class="card border-primary ml-2 mr-2 mb-3">
+        <div class="card-body">
+          <h5 class="card-title font-weight-normal"><span class="font-weight-bold" style="text-transform: uppercase;">{{department.departmentName}}</span> Department</h5>
+          <a class="btn btn-info btn-sm" [routerLink]="['/department/edit/', department._id]">Edit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="form-background">
+      <h3 class="form-topic">Add a new Department</h3>
+      <form [formGroup]="department" (submit)="addDepartmentName($event)">
+        <div class="form-group">
+          <label for="departmentName">Department Name</label>
+          <input formControlName="departmentName" type="text" class="form-control" autocomplete="off" id="departmentName" style="text-transform: capitalize;" placeholder="Enter Department Name">
+          <div *ngIf="departmentName.touched && departmentName.invalid" class="alert-danger bg-transparent">
+            <div *ngIf="departmentName.errors.required">*Department Name is required.</div>
+            <div *ngIf="departmentName.errors.pattern">*Can only use letters for Employee Type Name.</div>
+            <div *ngIf="departmentName.errors.minlength">*Employee Type Name should be minimum
+              {{departmentName.errors.minlength.requiredLength}} characters.</div>
+            <div *ngIf="departmentName.errors.shouldBeUnique">*Department Name is already taken.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Back</button>
+      </form>
+    </div>
+  </div>
+</div>

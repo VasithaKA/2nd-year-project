@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<div class="container margin-top">
+  <div class="row">
+    <div class="col-6">
+      <div class="form-background">
+        <h3 class="form-topic">Edit Machine Fault</h3>
+        <form [formGroup]="formFault" (submit)="updateFault($event)">
+          <div class="form-group">
+            <label for="faultName">Fault Name</label>
+            <input formControlName="faultName" type="text" class="form-control" autocomplete="off" id="faultName">
+            <div *ngIf="faultName.touched && faultName.invalid" class="alert-danger bg-transparent">
+              <div *ngIf="faultName.errors.required">*Fault Name is required.</div>
+              <div *ngIf="faultName.errors.shouldBeUnique">*Fault Name is already taken.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="faultDescription">Fault Description</label>
+            <textarea formControlName="faultDescription" class="form-control" id="faultDescription" rows="3" placeholder="Enter The Fault Description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userType">Fault Category</label>
+            <div class="input-group">
+              <select class="custom-select" id="faultCategoryId" aria-label="Example select with button addon">
+                <option *ngFor="let category of categories" value="{{category._id}}">{{category.faultCategoryName}}</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-secondary" type="button" routerLink="/faultTypeCategory">Add new category</button>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Update</button>
+          <button type="button" class="btn btn-danger ml-4" value="delete" (click)="deleteFault()">Delete</button>
+          <button type="button" class="btn btn-secondary ml-4" value="goBack" (click)="goBack()">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
