@@ -42,7 +42,6 @@ export class NavbarComponent implements OnInit {
   }
 
   reload() {
-
     UserProfileComponent.caller(this.ngOnInit())
   }
 
